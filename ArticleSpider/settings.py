@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+import os
 
-# Scrapy settings for article_spider project
+# Scrapy settings for ArticleSpider project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,17 +10,17 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'article_spider'
+BOT_NAME = 'ArticleSpider'
 
-SPIDER_MODULES = ['article_spider.spiders']
-NEWSPIDER_MODULE = 'article_spider.spiders'
+SPIDER_MODULES = ['ArticleSpider.spiders']
+NEWSPIDER_MODULE = 'ArticleSpider.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'article_spider (+http://www.yourdomain.com)'
+#USER_AGENT = 'ArticleSpider (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -47,13 +48,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'article_spider.middlewares.ArticleSpiderSpiderMiddleware': 543,
+#    'ArticleSpider.middlewares.ArticlespiderSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'article_spider.middlewares.ArticleSpiderDownloaderMiddleware': 543,
+#    'ArticleSpider.middlewares.ArticlespiderDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -64,9 +65,23 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'article_spider.pipelines.ArticleSpiderPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    #'ArticleSpider.pipelines.JsonExporterPipleline': 2,
+    'ArticleSpider.pipelines.ArticleImagePipeline':1,
+    'ArticleSpider.pipelines.MysqlTwistedPipline':2
+    # MysqlPipeline
+    # MysqlTwistedPipline
+}
+IMAGES_URLS_FIELD = "front_image_url"
+project_dir = os.path.abspath(os.path.dirname(__file__))
+IMAGES_STORE = os.path.join(project_dir,"images")
+
+import sys
+BASE_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.join(BASE_DIR, 'ArticleSpider'))
+
+# IMAGES_MIN_HEIGHT = 100
+# IMAGES_MIN_WIDTH = 100
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -88,3 +103,11 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+MYSQL_HOST = "localhost"
+MYSQL_DBNAME = "article_spider"
+MYSQL_USER = "mingjie"
+MYSQL_PASSWORD = "chen7010"
+
+SQL_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+SQL_DATE_FORMAT = "%Y-%m-%d"
